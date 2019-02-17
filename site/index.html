@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Back Your Scientific Stack</title>
+    <link rel='stylesheet' href='/style.css' />
+    <meta name="viewport" content="width=300, initial-scale=1">
+  </head>
+
+  <body>
+    <div id="landing">
+      <h1 id="title">Back Your<br>Scientific<br>Stack</h1>
+      <input id="search" value="What scientific software do you rely on?"></input>
+    </div>
+    <div>
+      <main>
+      <div class="options">
+        <div>
+          <label> How many people in your team use it? </label>
+          <input id="people" type="range" min=1 max=1000 value=1></input>
+          <i id="people-report"> Just You </i>
+        </div>
+        <div>
+          <label> What type of organisation do you work for? </label>
+          <ul class="organisation-type">
+            <li>Non Profit</li>
+            <li>For Profit</li>
+            <li>Academic</li>
+          </ul>
+        </div>
+      </div>
+      <div class="results">
+        <div class="saving">
+          <p> You are saving... </p>
+          <strong id="result">$1000</strong>
+        </div>
+        <div class="next">
+          <p> Compared to: </p>
+          <div>
+            <ul class="comparisons">
+              <li> Software </li>
+              <li> Software </li>
+              <li> Software </li>
+              <li> More... </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class=".button back">
+        <strong id="back-it-text"></strong>
+      </div>
+      </main>
+  </body>
+  <script src="/scripts.js" type="module"></script>
+</html>
