@@ -2,49 +2,72 @@ import { Autocomplete } from '/autocomplete.js';
 "use strict"
 
 const DEV = true;
+var classes = document.getElementsByClassName.bind(document);
+var tags = document.getElementsByTagName.bind(document);
+var id = document.getElementById.bind(document);
 var db_url;
 
 setup();
 
-let search_bar = {
-  html: document.getElementById("search"),
+let searchBar = {
+  html: id("search"),
   populate_main: function (data) {
-    // Hide Title and Dropdown
-    document.getElementById("title")
-      .style.display = "none";
-    document.getElementById("dropdown")
-      .style.display = "none";
+    views.back.hide();
+    views.landing.hide();
+    views.options.show();
 
-    // Reveal Main
-    document.getElementsByTagName("main")[0]
-      .style.display = "block";
+    // Save Date from Request
+    this.data = data;
 
     // Populate Main with Data from Request
     this.html.value = data.name;
-    document.getElementById("back-it-text")
+    id("back-it-text")
       .innerHTML = "Back " + data.name;
+
+    // Populate the related-software buttons
+    let comparisons = classes("comparisons")[0].children
+    for (let i of [0,1,2]) {
+      comparisons[i].innerHTML = data["related-to"][i].longname
+    }
+    comparisons[3].onclick = function() {
+      let c = 3;
+      function update() {
+        try { 
+          for (let i of [0,1,2]) {
+            comparisons[i].innerHTML = data["related-to"][i+c].longname;
+          }
+          c = c + 3;
+        } catch(e) {
+          c = 0;
+          update();
+        }
+      }
+      return update
+    }()
   },
+  data: null,
   autocomplete: null,
   register: function () {
     this.autocomplete = Autocomplete(this.html, {
       onclick: this.populate_main.bind(this),
       url: db_url
-    }
-    );
+    });
     this.html.addEventListener("keyup",this.autocomplete.update);
   }
 }
 
 
 let slider = {
-  html: document.getElementById("people"),
-  report: document.getElementById("people-report"),
+  html: id("people"),
+  report: id("people-report"),
   onchange: function () {
     switch (this.html.value) {
-      case 1: 
+      case "1": 
         this.report.innerHTML = "Just 1 Person";
-      case 1000:
+        break;
+      case "1000":
         this.report.innerHTML = "More than 1000 people";
+        break;
       default:
         this.report.innerHTML = this.html.value + " people";
     }
@@ -54,9 +77,55 @@ let slider = {
   }
 }
 
+let backButton = {
+  html: classes("back")[0],
+  onclick: function () {
+    views.options.hide();
+    views.back.show();
+  },
+  register: function () {
+    this.html.onclick = this.onclick
+  }
+}
 
-search_bar.register();
+let views = {
+  landing: {
+    hide: function hide() {
+      // Hide Title and Dropdown
+      id("title")
+        .style.display = "none";
+      id("dropdown")
+        .innerHTML = "";
+    },
+    show: function () {
+    }
+  },
+  options: {
+    hide: function () {
+      tags("main")[0]
+        .style.display = "none";
+    },
+    show: function () {
+      tags("main")[0]
+        .style.display = "block";
+    }
+  },
+  back: {
+    hide: function () {
+      tags("main")[1]
+        .style.display = "none";
+    },
+    show: function () {
+      tags("main")[1]
+        .style.display = "block";
+    }
+  }
+}
+
+
+searchBar.register();
 slider.register();
+backButton.register();
 
 function setup() {
   if(DEV) {

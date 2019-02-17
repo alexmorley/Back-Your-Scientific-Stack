@@ -7,48 +7,57 @@
   </head>
 
   <body>
-    <div id="landing">
+
+    <header id="landing">
       <h1 id="title">Back Your<br>Scientific<br>Stack</h1>
-      <input id="search" value="What scientific software do you rely on?"></input>
+      <input id="search" autocomplete="off" placeholder="What scientific software do you rely on?"></input>
+    </header>
+
+    <main class='view1'>
+    <div class="options">
+      <div>
+        <label> How many people in your team use it? </label>
+        <input id="people" type="range" min=1 max=1000 value=1></input>
+        <i id="people-report"> Just You </i>
+      </div>
+      <div>
+        <label> What type of organisation do you work for? </label>
+        <ul class="organisation-type">
+          <li>Non Profit</li>
+          <li>For Profit</li>
+          <li>Academic</li>
+        </ul>
+      </div>
     </div>
-    <div>
-      <main>
-      <div class="options">
+    <div class="results">
+      <div class="saving">
+        <p> You are saving... </p>
+        <strong id="result">$1000</strong>
+      </div>
+      <div class="next">
+        <p> Compared to: </p>
         <div>
-          <label> How many people in your team use it? </label>
-          <input id="people" type="range" min=1 max=1000 value=1></input>
-          <i id="people-report"> Just You </i>
-        </div>
-        <div>
-          <label> What type of organisation do you work for? </label>
-          <ul class="organisation-type">
-            <li>Non Profit</li>
-            <li>For Profit</li>
-            <li>Academic</li>
+          <ul class="comparisons button">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li type=list> More... </li>
           </ul>
         </div>
       </div>
-      <div class="results">
-        <div class="saving">
-          <p> You are saving... </p>
-          <strong id="result">$1000</strong>
-        </div>
-        <div class="next">
-          <p> Compared to: </p>
-          <div>
-            <ul class="comparisons">
-              <li> Software </li>
-              <li> Software </li>
-              <li> Software </li>
-              <li> More... </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class=".button back">
-        <strong id="back-it-text"></strong>
-      </div>
-      </main>
+    </div>
+    <div class="button back">
+      <strong id="back-it-text"></strong>
+    </div>
+    </main>
+    <main class='view2'>
+      <ul class='back-options button'>
+        <li> Donate directly </li>
+        <li> Include them in your next grant </li>
+        <li> Find out more about the team </li>
+        <li> Contribute </li>
+      </ul>
+    </main>
   </body>
   <script src="/scripts.js" type="module"></script>
 </html>
