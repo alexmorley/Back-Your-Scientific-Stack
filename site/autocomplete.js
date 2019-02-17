@@ -31,14 +31,15 @@ export function Autocomplete(elem, opts) {
     let options = search(current_input, opts)
       .then(
         function resolve(options) {
-          container.innerHTML = ""
+          container.innerHTML = "";
           if (options.length > 0) {
             options.forEach((el,i,arr) => {
               let entry = `<li> ${el[field]} </li>`;
               container.innerHTML = container.innerHTML + entry;
-              Array.from(container.children).forEach((child_el) => {
-                child_el.addEventListener("click", _ => opts.onclick(el));
-              });
+            });
+            Array.from(container.children).forEach((child_el,i) => {
+              let el = options[i];
+              child_el.addEventListener("click", _ => opts.onclick(el));
             });
           }
         },
