@@ -1,7 +1,7 @@
 import { Autocomplete } from '/autocomplete.js';
 "use strict"
 
-const DEV = true;
+const DEV = false;
 var classes = document.getElementsByClassName.bind(document);
 var tags = document.getElementsByTagName.bind(document);
 var id = document.getElementById.bind(document);
