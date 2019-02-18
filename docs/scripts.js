@@ -1,4 +1,4 @@
-import { Autocomplete } from '/autocomplete.js';
+import { Autocomplete } from './autocomplete.js';
 "use strict"
 
 const DEV = false;
