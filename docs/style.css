@@ -81,6 +81,7 @@ ul li:hover:not(.header) {
   border-radius: 50px;
   border: 2px solid #a91fa9;
   cursor: pointer;
+  box-shadow: 0 5px 10px #b7b7b7;
 }
 
 #search {
@@ -147,6 +148,11 @@ ul.organisation-type {
   padding: 0;
   margin: 0;
   margin-top: 1rem;
+}
+
+ul.organisation-type > li.active {
+  color: white;
+  background-color: #a91fa9;
 }
 
 ul.organisation-type > li,
