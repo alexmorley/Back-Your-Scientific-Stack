@@ -1,4 +1,4 @@
-import { Autocomplete } from './autocomplete.js';
+import { Autocomplete, search } from './autocomplete.js';
 "use strict"
 
 const DEV = false;
@@ -25,25 +25,8 @@ let searchBar = {
       .innerHTML = "Back " + data.name;
 
     // Populate the related-software buttons
-    let comparisons = classes("comparisons")[0].children
-    for (let i of [0,1,2]) {
-      comparisons[i].innerHTML = data["related-to"][i].longname
-    }
-    comparisons[3].onclick = function() {
-      let c = 3;
-      function update() {
-        try { 
-          for (let i of [0,1,2]) {
-            comparisons[i].innerHTML = data["related-to"][i+c].longname;
-          }
-          c = c + 3;
-        } catch(e) {
-          c = 0;
-          update();
-        }
-      }
-      return update
-    }()
+    comparisons.populate(data);
+    comparisons.register(data);
   },
   data: null,
   autocomplete: null,
@@ -56,6 +39,111 @@ let searchBar = {
   }
 }
 
+var comparisons = {
+  html: classes("comparisons")[0].children,
+  data: {},
+  populate: function (data,c=0) {
+    for (let i of [0,1,2]) {
+      let el = this.html[i];
+      let d  = this.data;
+      let longname = data["related-to"][i+c].longname;
+      el.innerHTML = longname;
+      search(longname, {url: db_url})
+        .then(
+          function resolve(data) {
+            d[longname] = data[0];
+            el.onclick = function () {
+              let price;
+              try {
+                price = data[0].pricing.priceInUSD;
+              } catch(e) {
+                // Set Random For Demo Purposes
+                price = Math.floor(Math.random()*1000);
+                data[0].pricing = {priceInUSD: price}
+              }
+              calculator.perPerson = price;
+            }
+          }
+        );
+    }
+  },
+  register: function (data) {
+    let t = this;
+    this.html[3].onclick = function() {
+      let c = 3;
+      function update() {
+        try { 
+          t.populate(data,c);
+          c = c + 3;
+        } catch(e) {
+          c = 0;
+          update();
+        }
+      }
+      return update
+    }()
+  }
+}
+
+let organisations = {
+  html: classes("organisation-type")[0].children,
+  active: {'Non Profit': false, 'For Profit': false, 'Academic': false},
+  set_active: function (code) {
+    this.active[code] = true;
+    Object.keys(this.active)
+      .forEach((el,i,arr) => {
+        if (el != code) {
+          this.active[el] = false;
+        }
+      });
+    this.update()
+  },
+  update: function () {
+    Array.from(this.html).forEach((el,i,arr) => {
+      if(this.active[el.innerHTML]) {
+        el.style['background-color'] = '#bbb';
+      } else {
+        el.style['background-color'] = '#f6f6f6';
+      }
+    });
+  },
+  register: function () {
+    Array.from(this.html).forEach((el,i,arr) => {
+      el.onclick = function () {
+        this.set_active(el.innerHTML)
+        switch (el.innerHTML) {
+          case "For Profit":
+            calculator.multiplier = 1.0;
+            break;
+          case "Non Profit":
+            calculator.multiplier = 0.5;
+            break;
+          case "Academic":
+            calculator.multiplier = 0.8;
+            break;
+        }
+      }.bind(this);
+    });
+  }
+}
+
+let calculator = new Proxy(
+  {
+    html: document.getElementById('result'),
+    value: 1000,
+    perPerson: 100,
+    numPeople: 1,
+    multiplier: 1,
+  },
+  {
+    set: function (obj, prop, newval) {
+      obj[prop] = newval;
+      obj.value = obj.perPerson * obj.numPeople * obj.multiplier;
+      obj.html.innerHTML = '$' + Math.floor(obj.value);
+      return true
+    }
+  }
+);
 
 let slider = {
   html: id("people"),
@@ -65,12 +153,13 @@ let slider = {
       case "1": 
         this.report.innerHTML = "Just 1 Person";
         break;
-      case "1000":
-        this.report.innerHTML = "More than 1000 people";
+      case "100":
+        this.report.innerHTML = "More than 100 people";
         break;
       default:
         this.report.innerHTML = this.html.value + " people";
     }
+    calculator.numPeople = this.html.value;
   },
   register: function () {
     this.html.onchange = this.onchange.bind(this);
@@ -126,12 +215,13 @@ let views = {
 searchBar.register();
 slider.register();
 backButton.register();
+organisations.register();
 
 function setup() {
   if(DEV) {
     console.log("Dev mode on.");
     db_url = 'http://localhost:3000';
-    //search_bar.onchange()
+    search_bar.onchange()
   } else {
     db_url = 'https://meta-open-db.com';
   }

@@ -1,4 +1,4 @@
-function search(term, opts) {
+export function search(term, opts) {
   let url
   if (!(opts.url)) {
     url = window.location.origin;
