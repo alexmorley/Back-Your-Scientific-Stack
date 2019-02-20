@@ -101,9 +101,9 @@ let organisations = {
   update: function () {
     Array.from(this.html).forEach((el,i,arr) => {
       if(this.active[el.innerHTML]) {
-        el.style['background-color'] = '#bbb';
+        el.classList.add("active");
       } else {
-        el.style['background-color'] = '#f6f6f6';
+        el.classList.remove("active");
       }
     });
   },
