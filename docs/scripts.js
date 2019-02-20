@@ -87,7 +87,7 @@ var comparisons = {
 
 let organisations = {
   html: classes("organisation-type")[0].children,
-  active: {'Non Profit': false, 'For Profit': false, 'Academic': false},
+  active: {'Non Profit': false, 'For Profit': true, 'Academic': false},
   set_active: function (code) {
     this.active[code] = true;
     Object.keys(this.active)
@@ -216,6 +216,7 @@ searchBar.register();
 slider.register();
 backButton.register();
 organisations.register();
+organisations.update();
 
 function setup() {
   if(DEV) {
