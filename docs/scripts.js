@@ -39,49 +39,64 @@ let searchBar = {
   }
 }
 
-var comparisons = {
-  html: classes("comparisons")[0].children,
-  data: {},
-  populate: function (data,c=0) {
-    for (let i of [0,1,2]) {
-      let el = this.html[i];
-      let d  = this.data;
-      let longname = data["related-to"][i+c].longname;
-      el.innerHTML = longname;
-      search(longname, {url: db_url})
-        .then(
-          function resolve(data) {
-            d[longname] = data[0];
-            el.onclick = function () {
-              let price;
-              try {
-                price = data[0].pricing.priceInUSD;
-              } catch(e) {
-                // Set Random For Demo Purposes
-                price = Math.floor(Math.random()*1000);
-                data[0].pricing = {priceInUSD: price}
-              }
-              calculator.perPerson = price;
-            }
-          }
-        );
-    }
-  },
-  register: function (data) {
-    let t = this;
-    this.html[3].onclick = function() {
-      let c = 3;
-      function update() {
-        try { 
-          t.populate(data,c);
-          c = c + 3;
-        } catch(e) {
-          c = 0;
-          update();
+let backButtons = {
+  html: classes("back-options")[0].children,
+  report: classes("output-text")[0],
+  active: {},
+  set_active: function (code) {
+    this.active[code] = true;
+    Object.keys(this.active)
+      .forEach((el,i,arr) => {
+        if (el != code) {
+          this.active[el] = false;
         }
+      });
+    this.update()
+  },
+  update: function () {
+    Array.from(this.html).forEach((el,i,arr) => {
+      if(this.active[el.innerHTML]) {
+        el.classList.add("active");
+      } else {
+        el.classList.remove("active");
       }
-      return update
-    }()
+    });
+  },
+  register: function () {
+    Array.from(this.html).forEach((el,i,arr) => {
+      el.onclick = function () {
+        this.set_active(el.innerHTML);
+        let text
+        switch(el.innerHTML) {
+          case 'Donate directly':
+            text = `
+              You can support Python by becoming a member of the <a href='https://www.python.org/psf/'> Python Software Foundation</a> or <a href='https://numfocus.org/'>NumFocus.
+              `;
+            break;
+          case 'Include them in your next grant':
+            text = `
+            <h2>How to include software donations in your grant</h2>
+              Some funding agencies will accept donations as part of grant money if they feel that it will provide value to your project. Some example for justifying this is given below. Other agencies or foundations are not prepared to do this, in such a case check out the alternative methods.
+            <h2>Sample Text for Justification</h2>
+              We estimate we are saving ${calculator.value} from license fees by using Python. In order to support the reliability of the software we are using in this project we propose to use this amount to provide financial backing to the organisation responsible for development and maintenance.
+            <h2>Alternatives</h2>
+              Instead of donating money directly it is possible to provide financial support in other ways such as hiring a developer to spend X% of their time on the project - this can often help prioritise areas that might not otherwise get attention - or purchasing a support contract.
+              `;
+            break;
+          case 'Find out more':
+            text = `
+            You can find out more about Python and related packages at <a href='https://www.python.org/psf/'>their website</a>.
+            `;
+            break;
+          case 'Contribute':
+            text = `
+              Python is developed <a href='https://github.com/python/cpython'>on github.
+            `;
+            break;
+        }
+        this.report.innerHTML = text; 
+      }.bind(this);
+    });
   }
 }
 
@@ -101,9 +116,9 @@ let organisations = {
   update: function () {
     Array.from(this.html).forEach((el,i,arr) => {
       if(this.active[el.innerHTML]) {
-        el.style['background-color'] = '#bbb';
+        el.classList.add("active");
       } else {
-        el.style['background-color'] = '#f6f6f6';
+        el.classList.remove("active");
       }
     });
   },
@@ -126,6 +141,92 @@ let organisations = {
     });
   }
 }
+
+var comparisons = {
+  html: classes("comparisons")[0].children,
+  data: {},
+  active: {},
+  set_active: function (code) {
+    this.active[code] = true;
+    Object.keys(this.active)
+      .forEach((el,i,arr) => {
+        if (el != code) {
+          this.active[el] = false;
+        }
+      });
+    this.update()
+  },
+  update: function () {
+    Array.from(this.html).forEach((el,i,arr) => {
+      if(this.active[el.innerHTML]) {
+        el.classList.add("active");
+      } else {
+        el.classList.remove("active");
+      }
+    });
+  },
+  populate: function (data,c=0) {
+    for (let i of [0,1,2]) {
+      let el = this.html[i];
+      let d  = this.data;
+      let longname = data["related-to"][i+c].longname;
+      el.innerHTML = longname;
+      search(longname, {url: db_url})
+        .then(
+          function resolve(data) {
+            d[longname] = data[0];
+            el.onclick = () => {
+              this.set_active(el.innerHTML);
+              let price;
+              try {
+                price = data[0].pricing.priceInUSD;
+              } catch(e) {
+                // Set Random For Demo Purposes
+                if (!(data[0])) {
+                  data = [{}];
+                }
+                switch(el.innerHTML) {
+                  case 'MATLAB':
+                    price = 2150;
+                    break;
+                  case 'SPSS':
+                    price = 1300;
+                    break;
+                  case 'Stata':
+                    price = 1700;
+                    break;
+                  default:
+                    price = Math.floor(Math.random()*1000);
+                }
+                data[0].pricing = {priceInUSD: price}
+              }
+              calculator.perPerson = price;
+            }
+            if(i==0) {
+              el.onclick();
+            }
+          }.bind(this)
+        );
+    }
+  },
+  register: function (data) {
+    let t = this;
+    this.html[3].onclick = function() {
+      let c = 3;
+      function update() {
+        try { 
+          t.populate(data,c);
+          c = c + 3;
+        } catch(e) {
+          c = 0;
+          update();
+        }
+      }
+      return update
+    }()
+  }
+}
+
 
 let calculator = new Proxy(
   {
@@ -177,6 +278,8 @@ let backButton = {
   }
 }
 
+
+
 let views = {
   landing: {
     hide: function hide() {
@@ -217,6 +320,7 @@ slider.register();
 backButton.register();
 organisations.register();
 organisations.update();
+backButtons.register();
 
 function setup() {
   if(DEV) {

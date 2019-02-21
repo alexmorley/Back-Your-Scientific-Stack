@@ -1,63 +1,75 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Back Your Scientific Stack</title>
-    <link rel='stylesheet' href='style.css' />
-    <meta name="viewport" content="width=300, initial-scale=1">
-  </head>
 
-  <body>
+<head>
+  <title>Back Your Scientific Stack</title>
+  <link rel='stylesheet' href='style.css' />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+  <meta name="viewport" content="width=300, initial-scale=1">
+</head>
 
-    <header id="landing">
-      <h1 id="title">Back Your<br>Scientific<br>Stack</h1>
-      <input id="search" autocomplete="off" placeholder="What scientific software do you rely on?"></input>
-    </header>
+<body>
 
-    <main class='view1'>
-    <div class="options">
-      <div>
-        <label> How many people in your team use it? </label>
-        <input id="people" type="range" min=1 max=100 value=1></input>
-        <i id="people-report"> Just 1 Person </i>
-      </div>
-      <div>
-        <label> What type of organisation do you work for? </label>
-        <ul class="organisation-type">
-          <li>Non Profit</li>
-          <li>For Profit</li>
-          <li>Academic</li>
-        </ul>
+  <header id="landing">
+    <div id="landing-container">
+      <h1 id="title"><i class="header-logo fas fa-layer-group"></i> </br>Back Your Scientific Stack</h1>
+      <div class="input-wrapper">
+        <input type="text" id="search" autocomplete="off" placeholder="What scientific software do you rely on?" />
       </div>
     </div>
-    <div class="results">
-      <div class="saving">
-        <p> You are saving... </p>
-        <strong id="result">$ ?</strong>
-      </div>
-      <div class="next">
-        <p> Compared to: </p>
+  </header>
+
+  <main class='view1'>
+    <div class="main-container">
+      <div class="options">
+        <div class="range-container">
+          <label> How many people in your team use it? </label>
+          <input id="people" type="range" min=1 max=100 value=1></input>
+          <i id="people-report"> Just 1 Person </i>
+        </div>
         <div>
-          <ul class="comparisons button">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li type=list> More... </li>
+          <label> What type of organisation do you work for? </label>
+          <ul class="buttons organisation-type">
+            <li>Non Profit</li>
+            <li>For Profit</li>
+            <li>Academic</li>
           </ul>
         </div>
       </div>
+      <div class="results">
+        <div class="saving">
+          <h3> You are saving... </h3>
+          <strong id="result">$?</strong>
+        </div>
+        <div class="next">
+          <h3> Compared to: </h3>
+          <div>
+            <ul class="buttons comparisons">
+              <li></li>
+              <li></li>
+              <li></li>
+              <li type=list> More... </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="button back">
+        <strong id="back-it-text"></strong>
+      </div>
     </div>
-    <div class="button back">
-      <strong id="back-it-text"></strong>
-    </div>
-    </main>
-    <main class='view2'>
-      <ul class='back-options button'>
-        <li> Donate directly </li>
-        <li> Include them in your next grant </li>
-        <li> Find out more about the team </li>
-        <li> Contribute </li>
+  </main>
+  <main class='view2'>
+    <div class="main-container">
+      <ul class='back-options buttons'>
+        <li>Donate directly</li>
+        <li>Include them in your next grant</li>
+        <li>Find out more</li>
+        <li>Contribute</li>
       </ul>
-    </main>
-  </body>
-  <script src="scripts.js" type="module"></script>
+      <p class='output-text'></p>
+    </div>
+  </main>
+</body>
+<script src="scripts.js" type="module"></script>
+
 </html>
