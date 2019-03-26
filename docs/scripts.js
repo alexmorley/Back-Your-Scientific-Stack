@@ -78,7 +78,7 @@ let backButtons = {
             <h2>How to include software donations in your grant</h2>
               Some funding agencies will accept donations as part of grant money if they feel that it will provide value to your project. Some example for justifying this is given below. Other agencies or foundations are not prepared to do this, in such a case check out the alternative methods.
             <h2>Sample Text for Justification</h2>
-              We estimate we are saving ${calculator.value} from license fees by using Python. In order to support the reliability of the software we are using in this project we propose to use this amount to provide financial backing to the organisation responsible for development and maintenance.
+              We estimate we are saving $${calculator.value} from license fees by using Python. In order to support the reliability of the software we are using in this project we propose to use this amount to provide financial backing to the organisation responsible for development and maintenance.
             <h2>Alternatives</h2>
               Instead of donating money directly it is possible to provide financial support in other ways such as hiring a developer to spend X% of their time on the project - this can often help prioritise areas that might not otherwise get attention - or purchasing a support contract.
               `;
